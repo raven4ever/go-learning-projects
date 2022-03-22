@@ -1,0 +1,1 @@
+# Projects created to learn Go from [freeCodeCamp.org](https://www.youtube.com/watch?v=jFfo23yIWac)
