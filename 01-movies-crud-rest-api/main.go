@@ -8,6 +8,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/raven4ever/movies-crud-rest-api/pkg/data"
+	"github.com/raven4ever/movies-crud-rest-api/pkg/model"
 )
 
 func main() {
@@ -26,7 +28,7 @@ func main() {
 
 func getMovies(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(movies)
+	json.NewEncoder(w).Encode(data.Movies)
 }
 
 func getMovie(w http.ResponseWriter, r *http.Request) {
@@ -34,7 +36,7 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	for _, item := range movies {
+	for _, item := range data.Movies {
 		if item.ID == params["id"] {
 			json.NewEncoder(w).Encode(item)
 			return
@@ -45,13 +47,13 @@ func getMovie(w http.ResponseWriter, r *http.Request) {
 func createMovie(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var newMovie Movie
+	var newMovie model.Movie
 
 	_ = json.NewDecoder(r.Body).Decode(&newMovie)
 
 	newMovie.ID = strconv.Itoa(rand.Intn(100000))
 
-	movies = append(movies, newMovie)
+	data.Movies = append(data.Movies, newMovie)
 
 	json.NewEncoder(w).Encode(newMovie)
 }
@@ -61,17 +63,17 @@ func updateMovie(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	for index, item := range movies {
+	for index, item := range data.Movies {
 		if item.ID == params["id"] {
-			movies = append(movies[:index], movies[index+1:]...)
+			data.Movies = append(data.Movies[:index], data.Movies[index+1:]...)
 
-			var updatedMovie Movie
+			var updatedMovie model.Movie
 
 			_ = json.NewDecoder(r.Body).Decode(&updatedMovie)
 
 			updatedMovie.ID = params["id"]
 
-			movies = append(movies, updatedMovie)
+			data.Movies = append(data.Movies, updatedMovie)
 
 			json.NewEncoder(w).Encode(updatedMovie)
 		}
@@ -83,12 +85,12 @@ func deleteMovie(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	for index, item := range movies {
+	for index, item := range data.Movies {
 		if item.ID == params["id"] {
-			movies = append(movies[:index], movies[index+1:]...)
+			data.Movies = append(data.Movies[:index], data.Movies[index+1:]...)
 			break
 		}
 	}
 
-	json.NewEncoder(w).Encode(movies)
+	json.NewEncoder(w).Encode(data.Movies)
 }

@@ -1,4 +1,4 @@
-module movies-crud-rest-api
+module github.com/raven4ever/movies-crud-rest-api
 
 go 1.18
 
